@@ -7,7 +7,6 @@ import { gStyle } from "./styles/gStyle";
 import MainStack from "./components/stack-navigation";
 import "react-native-gesture-handler";
 import { MenuProvider } from "react-native-popup-menu";
-import { NavigationContainer } from "@react-navigation/native";
 
 export default function App() {
   const [font, setFont] = useState(false);
