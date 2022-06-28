@@ -169,7 +169,6 @@ export default function Form({ route }) {
                       onPress={() => {
                         hideMenu();
                         navigation.navigate("TakePhoto", {
-                          setUserImage: setUserImage,
                           userImage: userImage,
                           setSelectedImage: setSelectedImage,
                           selectedImage: selectedImage,

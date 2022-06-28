@@ -153,10 +153,13 @@ export default function EditForm({ route }) {
                   >
                     <MenuItem
                       onPress={() => {
-                        navigation.navigate("TakePhoto", {
-                          userImage,
-                        });
                         hideMenu();
+                        navigation.navigate("TakePhoto", {
+                          userImage: userImage,
+                          setSelectedImage: setSelectedImage,
+                          selectedImage: selectedImage,
+                        });
+                        console.log("open camera");
                       }}
                     >
                       Добавить фото
