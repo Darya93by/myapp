@@ -82,7 +82,22 @@ export default function Navigate() {
             },
           }}
         />
-        <Stack.Screen name="TakePhoto" component={TakePhoto} />
+        <Stack.Screen
+          name="TakePhoto"
+          options={{
+            title: "Сделать фото",
+            headerStyle: {
+              backgroundColor: "#F0E68C",
+              height: 60,
+              borderRadius: 10,
+            },
+            headerTitleStyle: {
+              fontFamily: "ns-normal",
+              fontSize: 26,
+            },
+          }}
+          component={TakePhoto}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, Image, Button } from "react-native";
+import { StyleSheet, View, Image, Button, Text } from "react-native";
 import { Alert } from "react-native";
 import { Camera } from "expo-camera";
 import FlatButton from "./FlatButton";
 import { useNavigation } from "@react-navigation/native";
+import { AntDesign } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default function TakePhoto({ route }) {
   const navigation = useNavigation();
-  const userImage = route?.params || {};
+  let { setSelectedImage, selectedImage, userImage } = route?.params || {};
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [camera, setCamera] = useState(null);
   const [image, setImage] = useState(null);
@@ -29,44 +31,95 @@ export default function TakePhoto({ route }) {
     return Alert.alert("Ошибка", "Нет доступа к камере");
   }
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: "#FFF8DC" }}>
       <View style={styles.cameraContainer}>
         <Camera
           ref={(ref) => setCamera(ref)}
+          autoFocus="on"
           style={styles.fixedRatio}
           type={type}
           ratio={"1:1"}
         />
       </View>
-      <Button
-        title="Flip Image"
-        onPress={() => {
-          setType(
-            type === Camera.Constants.Type.back
-              ? Camera.Constants.Type.front
-              : Camera.Constants.Type.back
-          );
+      <View
+        style={{
+          flex: 0 / 5,
+          flexDirection: "row",
+          justifyContent: "space-between",
+          paddingStart: 20,
+          paddingEnd: 20,
         }}
-      ></Button>
-      <Button
-        title="Take Picture"
+      >
+        <MaterialCommunityIcons
+          name="camera-switch"
+          size={45}
+          color="black"
+          onPress={() => {
+            setType(
+              type === Camera.Constants.Type.back
+                ? Camera.Constants.Type.front
+                : Camera.Constants.Type.back
+            );
+          }}
+        />
+        <AntDesign
+          name="camera"
+          size={45}
+          color="black"
+          onPress={() => {
+            takePicture();
+          }}
+        />
+      </View>
+      {image && (
+        <Image
+          source={{ uri: image }}
+          style={{
+            flex: 1,
+            borderRadius: 100,
+            aspectRatio: 1,
+            alignSelf: "center",
+          }}
+        />
+      )}
+      <FlatButton
+        text="Сохранить"
         onPress={() => {
-          takePicture();
+          if (image.cancelled === true) {
+            return;
+          }
+          setSelectedImage({ localUri: image });
+
+          if (selectedImage !== null) {
+            userImage = { uri: selectedImage.localUri };
+          } else userImage = require("../assets/Pngtree.png");
+
+          navigation.goBack();
         }}
       />
-      {image && <Image source={{ uri: image }} style={{ flex: 1 }} />}
-      <FlatButton text="Сохранить" onPress={() => navigation.goBack(image)} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   cameraContainer: {
-    flex: 1,
-    flexDirection: "row",
+    alignSelf: "center",
+    flex: 2,
   },
   fixedRatio: {
     flex: 1,
     aspectRatio: 1,
+  },
+  text: {
+    marginBottom: "1%",
+    marginLeft: "5%",
+    fontFamily: "ns-light",
+    fontSize: 15,
+    backgroundColor: "#F7F6E4",
+    width: 250,
+    alignSelf: "center",
+    borderRadius: 8,
+    textAlign: "center",
+    height: 30,
   },
 });

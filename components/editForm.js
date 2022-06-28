@@ -129,7 +129,22 @@ export default function EditForm({ route }) {
                   <Menu
                     visible={visible}
                     anchor={
-                      <Text onPress={showMenu} style={styles.text}>
+                      <Text
+                        onPress={showMenu}
+                        style={[
+                          styles.text,
+                          {
+                            width: 300,
+                            height: 45,
+                            borderRadius: 8,
+                            marginTop: 10,
+                            textAlignVertical: "center",
+                            textAlign: "center",
+                            backgroundColor: "#F7F6E4",
+                            alignSelf: "center",
+                          },
+                        ]}
+                      >
                         {" "}
                         Изменить изображение{" "}
                       </Text>

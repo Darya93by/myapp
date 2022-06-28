@@ -120,10 +120,8 @@ export default function Main({ navigation }) {
     },
   ]);
 
-  const [formAdd, setFormAdd] = useState(false);
   const [editForm, setEditForm] = useState(false);
 
-  // const img = require("../assets/Pngtree.png");
   const addContact = (newContact, userImage) => {
     setContact((list) => {
       newContact.key = Math.random().toString(36);
@@ -135,7 +133,6 @@ export default function Main({ navigation }) {
       newContact.image = userImage;
       return [newContact, ...list];
     });
-    setFormAdd(false);
   };
 
   const stateContact = (elem) => {
@@ -344,7 +341,6 @@ export default function Main({ navigation }) {
           style={styles.add}
           color="black"
           onPress={() => {
-            setFormAdd(true);
             navigation.navigate("Form", {
               addContact: addContact,
               stateContact: stateContact,

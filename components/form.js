@@ -28,7 +28,6 @@ export default function Form({ route }) {
 
   const [selectedImage, setSelectedImage] = useState(null);
   let userImage;
-  const [takePoto, setTakePhoto] = useState(false);
 
   let openImagePickerAsync = async () => {
     let permissionResult =
@@ -50,6 +49,10 @@ export default function Form({ route }) {
   if (selectedImage !== null) {
     userImage = { uri: selectedImage.localUri };
   } else userImage = require("../assets/Pngtree.png");
+
+  let setUserImage = (thisSource) => {
+    userImage = { uri: thisSource };
+  };
 
   return (
     <TouchableWithoutFeedback
@@ -138,8 +141,24 @@ export default function Form({ route }) {
 
                   <Menu
                     visible={visible}
+                    style={{ width: "auto", left: 40 }}
                     anchor={
-                      <Text onPress={showMenu} style={styles.text}>
+                      <Text
+                        onPress={showMenu}
+                        style={[
+                          styles.text,
+                          {
+                            width: 300,
+                            height: 45,
+                            borderRadius: 8,
+                            marginTop: 10,
+                            textAlignVertical: "center",
+                            textAlign: "center",
+                            backgroundColor: "#F7F6E4",
+                            alignSelf: "center",
+                          },
+                        ]}
+                      >
                         {" "}
                         Добавить изображение{" "}
                       </Text>
@@ -148,11 +167,14 @@ export default function Form({ route }) {
                   >
                     <MenuItem
                       onPress={() => {
+                        hideMenu();
                         navigation.navigate("TakePhoto", {
-                          userImage,
+                          setUserImage: setUserImage,
+                          userImage: userImage,
+                          setSelectedImage: setSelectedImage,
+                          selectedImage: selectedImage,
                         });
                         console.log("open camera");
-                        hideMenu();
                       }}
                     >
                       Добавить фото
