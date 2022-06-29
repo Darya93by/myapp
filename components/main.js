@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -12,13 +12,11 @@ import {
 } from "react-native";
 import { gStyle } from "../styles/gStyle";
 import { Ionicons } from "@expo/vector-icons";
-import Form from "./form";
 import { MaterialIcons } from "@expo/vector-icons";
-import EditForm from "./editForm";
 import { Entypo } from "@expo/vector-icons";
-import Swipeout from "react-native-swipeout";
 import { Foundation } from "@expo/vector-icons";
 import { Searchbar } from "react-native-paper";
+import { SwipeListView } from "react-native-swipe-list-view";
 
 export default function Main({ navigation }) {
   const [contact, setContact] = useState([
@@ -124,8 +122,10 @@ export default function Main({ navigation }) {
 
   const addContact = (newContact, userImage) => {
     setContact((list) => {
-      newContact.key = Math.random().toString(36);
-      newContact.image = userImage;
+      if (newContact.key == undefined) {
+        newContact.key = Math.random().toString(36);
+        newContact.image = userImage;
+      } else newContact.image = userImage;
       return [newContact, ...list];
     });
     setSearching((list) => {
@@ -179,13 +179,6 @@ export default function Main({ navigation }) {
   function makeCall(number) {
     Linking.openURL(`tel: ${number}`);
   }
-  const item = () => {
-    setContact((list) => {
-      return list.map((elem) => {
-        return elem;
-      });
-    });
-  };
 
   const [searchinf, setSearching] = useState(contact);
   const searchFunction = (text) => {
@@ -220,115 +213,102 @@ export default function Main({ navigation }) {
       />
       <View style={{ flex: 11.5 }}>
         <View>
-          <FlatList
+          <SwipeListView
             keyExtractor={(item) => item.key}
             style={{ top: -20 }}
             data={searchinf}
-            renderItem={({ item, key }) => (
-              <Swipeout
-                left={[
-                  {
-                    sensitivity: 150,
-                    autoClose: true,
-                    onClose: () => {
-                      if (item.key != null) {
-                        return (item.key = null);
-                      }
-                    },
-                    onOpen: () => {
-                      handleSlectedCont(item);
-                    },
-                    text: (
-                      <Foundation
-                        name="telephone"
-                        size={24}
-                        color="black"
-                        onPress={() => {
-                          makeCall(item.number);
-                        }}
-                      />
-                    ),
-                  },
-                ]}
-                right={[
-                  {
-                    sensitivity: 150,
-                    style: {
-                      backgroundColor: "#FFFFFF",
-                    },
-                    autoClose: true,
-                    onClose: () => {
-                      if (item.key != null) {
-                        return (item.key = null);
-                      }
-                    },
-                    onOpen: () => {
-                      handleSlectedCont(item);
-                    },
-
-                    text: [
-                      <MaterialIcons
-                        name="delete"
-                        size={20}
-                        color="black"
-                        style={{ backgroundColor: "#FFFFFF", padding: 14 }}
-                        onPress={() => {
-                          Alert.alert(
-                            "",
-                            "Вы действительно хотите удалить контакт?",
-                            [
-                              {
-                                text: "Да",
-                                onPress: () => deleteContact(item.key),
-                              },
-                              {
-                                text: "Нет",
-                                onPress: () => console.log("отмена"),
-                              },
-                            ]
-                          );
-                        }}
-                      />,
-                      <Entypo
-                        name="edit"
-                        size={20}
-                        color="black"
-                        style={{
-                          padding: 14,
-                          backgroundColor: "#FFFFFF",
-                          right: 5,
-                        }}
-                        onPress={() => [
-                          handleSlectedCont(item),
-                          navigation.navigate("EditForm", {
-                            selectedCont: selectedCont,
-                            addSelectCont: addSelectCont,
-                            item,
-                          }),
-                        ]}
-                      />,
-                    ],
-                  },
-                ]}
-              >
-                <TouchableOpacity
-                  onPress={() => navigation.navigate("About", item)}
-                >
-                  <View
-                    style={[
-                      { flex: 1 },
-                      { flexDirection: "row" },
-                      { alignItems: "center" },
-                      { backgroundColor: "#FFFFFF" },
-                    ]}
-                  >
-                    <Image source={item.image} style={styles.image} />
-                    <Text style={styles.nameStyle} key={item.key}>
-                      {item.name} {item.lastname}{" "}
-                    </Text>
-                  </View>
+            renderHiddenItem={({ item, key }) => (
+              <View style={styles.rowBack}>
+                <TouchableOpacity>
+                  <Text>
+                    <Foundation
+                      name="telephone"
+                      size={24}
+                      color="black"
+                      onPress={() => {
+                        makeCall(item.number);
+                      }}
+                    />
+                  </Text>
                 </TouchableOpacity>
-              </Swipeout>
+                <TouchableOpacity
+                  style={[styles.backRightBtn, styles.backRightBtnLeft]}
+                >
+                  <Text>
+                    <MaterialIcons
+                      style={{
+                        padding: 14,
+                        right: 50,
+                      }}
+                      name="delete"
+                      size={20}
+                      color="black"
+                      onPress={() => {
+                        Alert.alert(
+                          "",
+                          "Вы действительно хотите удалить контакт?",
+                          [
+                            {
+                              text: "Да",
+                              onPress: () => deleteContact(item.key),
+                            },
+                            {
+                              text: "Нет",
+                              onPress: () => console.log("отмена"),
+                            },
+                          ]
+                        );
+                      }}
+                    />
+                  </Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={{ paddingRight: 10 }}>
+                  <Text>
+                    <Entypo
+                      name="edit"
+                      size={20}
+                      color="black"
+                      style={{
+                        padding: 14,
+                        right: 0,
+                      }}
+                      onPress={() => [
+                        handleSlectedCont(item),
+                        navigation.navigate("EditForm", {
+                          selectedCont: selectedCont,
+                          addSelectCont: addSelectCont,
+                          item,
+                        }),
+                      ]}
+                    />
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            )}
+            leftOpenValue={50}
+            rightOpenValue={-100}
+            previewRowKey={"0"}
+            previewOpenValue={-40}
+            previewOpenDelay={3000}
+            directionalDistanceChangeThreshold={5}
+            renderItem={({ item, key }) => (
+              <TouchableOpacity
+                onPress={() => navigation.navigate("About", item)}
+              >
+                <View
+                  style={[
+                    { flex: 1 },
+                    { flexDirection: "row" },
+                    { alignItems: "center" },
+                    { backgroundColor: "#FFFFFF" },
+                  ]}
+                >
+                  <Image source={item.image} style={styles.image} />
+                  <Text style={styles.nameStyle} key={item.key}>
+                    {item.name} {item.lastname}{" "}
+                  </Text>
+                </View>
+              </TouchableOpacity>
             )}
           />
         </View>
@@ -403,5 +383,27 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     alignSelf: "center",
     borderRadius: 50,
+  },
+  rowBack: {
+    alignItems: "center",
+    backgroundColor: "#DDD",
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingLeft: 15,
+  },
+  backRightBtn: {
+    alignItems: "center",
+    bottom: 0,
+    justifyContent: "center",
+    position: "absolute",
+    top: 0,
+    width: 50,
+  },
+  backRightBtnLeft: {
+    right: 50,
+  },
+  backTextWhite: {
+    color: "#FFF",
   },
 });

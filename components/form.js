@@ -50,8 +50,11 @@ export default function Form({ route }) {
     userImage = { uri: selectedImage.localUri };
   } else userImage = require("../assets/Pngtree.png");
 
-  let setUserImage = (thisSource) => {
-    userImage = { uri: thisSource };
+  const minLengh = (values) => {
+    if (values.name == "" && values.lastname == "") {
+      values.name = "Без";
+      values.lastname = "имени";
+    }
   };
 
   return (
@@ -72,6 +75,7 @@ export default function Form({ route }) {
                 image: "",
               }}
               onSubmit={(values, action) => {
+                minLengh(values);
                 if (!stateContact(values)) {
                   return Alert.alert(
                     "Такой номер уже существует",
@@ -82,6 +86,7 @@ export default function Form({ route }) {
                         onPress: () => {
                           addContact(values, userImage);
                           action.resetForm;
+                          navigation.navigate("Main");
                         },
                       },
 
@@ -93,9 +98,14 @@ export default function Form({ route }) {
                       },
                     ]
                   );
+                } else if (values.number == "") {
+                  Alert.alert(
+                    "Попытка сохранить пустой номер",
+                    "Укажите номер телефона"
+                  );
                 } else {
                   addContact(values, userImage);
-                  action.resetForm;
+                  navigation.navigate("Main");
                 }
               }}
             >
@@ -192,7 +202,6 @@ export default function Form({ route }) {
                     text="Сохранить"
                     onPress={() => {
                       props.handleSubmit();
-                      navigation.navigate("Main");
                     }}
                   />
                 </View>

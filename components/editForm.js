@@ -15,7 +15,7 @@ import { Formik } from "formik";
 import { Alert } from "react-native";
 import { Menu, MenuItem } from "react-native-material-menu";
 import * as ImagePicker from "expo-image-picker";
-import TakePhoto from "./TakePhoto";
+
 import { useNavigation } from "@react-navigation/native";
 
 export default function EditForm({ route }) {
@@ -51,6 +51,13 @@ export default function EditForm({ route }) {
     userImage = { uri: selectedImage.localUri };
   } else userImage = item.image;
 
+  const minLengh = (values) => {
+    if (values.name == "" && values.lastname == "") {
+      values.name = "Без";
+      values.lastname = "имени";
+    }
+  };
+
   return (
     <TouchableWithoutFeedback
       onPress={() => {
@@ -70,20 +77,33 @@ export default function EditForm({ route }) {
                 image: item.image,
               }}
               onSubmit={(values) => {
-                return Alert.alert("Контакт изменён", "Cохранить изменения?", [
-                  {
-                    text: "Да",
-                    onPress: () => {
-                      addSelectCont(values, userImage);
-                    },
-                  },
-                  {
-                    text: "Отмена",
-                    onPress: () => {
-                      console.log("отменено");
-                    },
-                  },
-                ]);
+                minLengh(values);
+
+                if (values.number == "") {
+                  Alert.alert(
+                    "Попытка сохранить пустой номер",
+                    "Укажите номер телефона"
+                  );
+                } else
+                  return Alert.alert(
+                    "Контакт изменён",
+                    "Cохранить изменения?",
+                    [
+                      {
+                        text: "Да",
+                        onPress: () => {
+                          addSelectCont(values, userImage);
+                          navigation.navigate("Main");
+                        },
+                      },
+                      {
+                        text: "Отмена",
+                        onPress: () => {
+                          console.log("отменено");
+                        },
+                      },
+                    ]
+                  );
               }}
             >
               {(props) => (
@@ -178,7 +198,6 @@ export default function EditForm({ route }) {
                     text="Сохранить"
                     onPress={() => {
                       props.handleSubmit();
-                      navigation.navigate("Main");
                     }}
                   />
                 </View>
