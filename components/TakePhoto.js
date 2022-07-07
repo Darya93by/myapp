@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Image, Button, Text } from "react-native";
 import { Alert } from "react-native";
 import { Camera } from "expo-camera";
-import FlatButton from "./FlatButton";
 import { useNavigation } from "@react-navigation/native";
+import { Feather } from "@expo/vector-icons";
+import { EvilIcons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 export default function TakePhoto({ route }) {
   const navigation = useNavigation();
@@ -33,70 +33,102 @@ export default function TakePhoto({ route }) {
   return (
     <View style={{ flex: 1, backgroundColor: "#FFF8DC" }}>
       <View style={styles.cameraContainer}>
-        <Camera
-          ref={(ref) => setCamera(ref)}
-          autoFocus="on"
-          style={styles.fixedRatio}
-          type={type}
-          ratio={"1:1"}
-        />
-      </View>
-      <View
-        style={{
-          flex: 0 / 5,
-          flexDirection: "row",
-          justifyContent: "space-between",
-          paddingStart: 20,
-          paddingEnd: 20,
-        }}
-      >
-        <MaterialCommunityIcons
-          name="camera-switch"
-          size={45}
-          color="black"
-          onPress={() => {
-            setType(
-              type === Camera.Constants.Type.back
-                ? Camera.Constants.Type.front
-                : Camera.Constants.Type.back
-            );
-          }}
-        />
-        <AntDesign
-          name="camera"
-          size={45}
-          color="black"
-          onPress={() => {
-            takePicture();
-          }}
-        />
+        {!image && (
+          <Camera
+            ref={(ref) => setCamera(ref)}
+            autoFocus="on"
+            style={styles.fixedRatio}
+            type={type}
+            ratio={"1:1"}
+          />
+        )}
+
+        {image && (
+          <Image
+            source={{ uri: image }}
+            style={{
+              flex: 1,
+              borderRadius: 100,
+              aspectRatio: 1,
+              alignSelf: "center",
+            }}
+          />
+        )}
       </View>
       {image && (
-        <Image
-          source={{ uri: image }}
+        <View
           style={{
-            flex: 1,
-            borderRadius: 100,
-            aspectRatio: 1,
-            alignSelf: "center",
+            flex: 0 / 5,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            paddingStart: 20,
+            paddingEnd: 20,
           }}
-        />
+        >
+          <EvilIcons
+            name="camera"
+            size={45}
+            onPress={() => {
+              setImage(null);
+            }}
+            color="black"
+          />
+          <AntDesign
+            name="check"
+            size={40}
+            color="black"
+            onPress={() => {
+              if (image === null || undefined) {
+                userImage = require("../assets/Pngtree.png");
+                navigation.goBack();
+              } else {
+                if (image.cancelled === true) {
+                  return;
+                }
+                setSelectedImage({ localUri: image });
+
+                if (selectedImage !== null) {
+                  userImage = { uri: selectedImage.localUri };
+                } else userImage = require("../assets/Pngtree.png");
+
+                navigation.goBack();
+              }
+            }}
+          />
+        </View>
       )}
-      <FlatButton
-        text="Сохранить"
-        onPress={() => {
-          if (image.cancelled === true) {
-            return;
-          }
-          setSelectedImage({ localUri: image });
-
-          if (selectedImage !== null) {
-            userImage = { uri: selectedImage.localUri };
-          } else userImage = require("../assets/Pngtree.png");
-
-          navigation.goBack();
-        }}
-      />
+      {!image && (
+        <View
+          style={{
+            flex: 0 / 5,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            paddingStart: 20,
+            paddingEnd: 20,
+          }}
+        >
+          <EvilIcons
+            name="redo"
+            size={50}
+            color="black"
+            onPress={() => {
+              setType(
+                type === Camera.Constants.Type.back
+                  ? Camera.Constants.Type.front
+                  : Camera.Constants.Type.back
+              );
+            }}
+          />
+          <Feather
+            name="aperture"
+            size={38}
+            color="black"
+            onPress={() => {
+              takePicture();
+            }}
+          />
+        </View>
+      )}
     </View>
   );
 }

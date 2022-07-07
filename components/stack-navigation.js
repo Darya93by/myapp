@@ -37,10 +37,12 @@ export default function Navigate() {
           name="About"
           component={About}
           options={{
+            headerMode: "none",
+            mode: "modal",
             title: "Подробности",
             headerStyle: {
               backgroundColor: "#F0E68C",
-              height: 80,
+              height: 0,
               borderRadius: 10,
             },
             headerTitleStyle: {

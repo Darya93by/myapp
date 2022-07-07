@@ -3,9 +3,7 @@ import {
   StyleSheet,
   Text,
   View,
-  FlatList,
   TouchableOpacity,
-  Modal,
   Alert,
   Linking,
   Image,
@@ -25,7 +23,7 @@ export default function Main({ navigation }) {
       name: "Дарья",
       lastname: "Пушкарь",
       number: "+375(33)6905793",
-      more: "more",
+      more: " more more more more more more more more more more more more more more more more more more more more more more more more",
       key: 1,
     },
     {
@@ -293,7 +291,17 @@ export default function Main({ navigation }) {
             directionalDistanceChangeThreshold={5}
             renderItem={({ item, key }) => (
               <TouchableOpacity
-                onPress={() => navigation.navigate("About", item)}
+                onPress={() => {
+                  handleSlectedCont(item);
+                  console.log(item);
+                  navigation.navigate("About", {
+                    item: item,
+                    deleteContact: deleteContact,
+                    handleSlectedCont: handleSlectedCont,
+                    addSelectCont: addSelectCont,
+                    selectedCont: selectedCont,
+                  });
+                }}
               >
                 <View
                   style={[
@@ -377,8 +385,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   image: {
-    width: 30,
-    height: 30,
+    width: 35,
+    height: 35,
     left: 5,
     alignItems: "flex-start",
     alignSelf: "center",
