@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View, Alert, Image, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Alert,
+  Image,
+  ScrollView,
+  Share,
+} from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
@@ -18,6 +26,24 @@ export default function About({ route }) {
   const [visible, setVisible] = useState(false);
   const hideMenu = () => setVisible(false);
   const showMenu = () => setVisible(true);
+  const onShare = async () => {
+    try {
+      const result = await Share.share({
+        message: item.name + " " + item.lastname + "\n" + item.number,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
 
   return (
     <ScrollView>
@@ -47,6 +73,7 @@ export default function About({ route }) {
           >
             <MenuItem
               onPress={() => [
+                setVisible(false),
                 handleSlectedCont(item),
                 navigation.navigate("EditForm", {
                   selectedCont: selectedCont,
@@ -59,6 +86,7 @@ export default function About({ route }) {
             </MenuItem>
             <MenuItem
               onPress={() => {
+                setVisible(false);
                 Alert.alert("", "Вы действительно хотите удалить контакт?", [
                   {
                     text: "Да",
@@ -76,7 +104,12 @@ export default function About({ route }) {
             >
               Удалить
             </MenuItem>
-            <MenuItem onPress={() => console.log("with other")}>
+            <MenuItem
+              onPress={() => {
+                setVisible(false);
+                onShare();
+              }}
+            >
               Поделиться контактом
             </MenuItem>
           </Menu>
