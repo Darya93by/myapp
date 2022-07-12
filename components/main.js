@@ -217,20 +217,33 @@ export default function Main({ navigation }) {
             data={searchinf}
             renderHiddenItem={({ item, key }) => (
               <View style={styles.rowBack}>
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => {
+                    makeCall(item.number);
+                  }}
+                >
                   <Text>
-                    <Foundation
-                      name="telephone"
-                      size={24}
-                      color="black"
-                      onPress={() => {
-                        makeCall(item.number);
-                      }}
-                    />
+                    <Foundation name="telephone" size={24} color="black" />
                   </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                   style={[styles.backRightBtn, styles.backRightBtnLeft]}
+                  onPress={() => {
+                    Alert.alert(
+                      "",
+                      "Вы действительно хотите удалить контакт?",
+                      [
+                        {
+                          text: "Да",
+                          onPress: () => deleteContact(item.key),
+                        },
+                        {
+                          text: "Нет",
+                          onPress: () => console.log("отмена"),
+                        },
+                      ]
+                    );
+                  }}
                 >
                   <Text>
                     <MaterialIcons
@@ -241,26 +254,20 @@ export default function Main({ navigation }) {
                       name="delete"
                       size={20}
                       color="black"
-                      onPress={() => {
-                        Alert.alert(
-                          "",
-                          "Вы действительно хотите удалить контакт?",
-                          [
-                            {
-                              text: "Да",
-                              onPress: () => deleteContact(item.key),
-                            },
-                            {
-                              text: "Нет",
-                              onPress: () => console.log("отмена"),
-                            },
-                          ]
-                        );
-                      }}
                     />
                   </Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={{ paddingRight: 10 }}>
+                <TouchableOpacity
+                  style={{ paddingRight: 10 }}
+                  onPress={() => [
+                    handleSlectedCont(item),
+                    navigation.navigate("EditForm", {
+                      selectedCont: selectedCont,
+                      addSelectCont: addSelectCont,
+                      item,
+                    }),
+                  ]}
+                >
                   <Text>
                     <Entypo
                       name="edit"
@@ -270,14 +277,6 @@ export default function Main({ navigation }) {
                         padding: 14,
                         right: 0,
                       }}
-                      onPress={() => [
-                        handleSlectedCont(item),
-                        navigation.navigate("EditForm", {
-                          selectedCont: selectedCont,
-                          addSelectCont: addSelectCont,
-                          item,
-                        }),
-                      ]}
                     />
                   </Text>
                 </TouchableOpacity>
@@ -322,20 +321,22 @@ export default function Main({ navigation }) {
         </View>
       </View>
 
-      <View style={{ flex: 1 }}>
+      <TouchableOpacity
+        style={{ flex: 1 }}
+        onPress={() => {
+          navigation.navigate("Form", {
+            addContact: addContact,
+            stateContact: stateContact,
+          });
+        }}
+      >
         <Ionicons
           name="person-add"
           size={35}
           style={styles.add}
           color="black"
-          onPress={() => {
-            navigation.navigate("Form", {
-              addContact: addContact,
-              stateContact: stateContact,
-            });
-          }}
         />
-      </View>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -358,7 +359,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: "ns-light",
     margin: 8,
-    paddingBottom: 3,
     left: 10,
     alignItems: "flex-start",
   },

@@ -69,8 +69,8 @@ export default function EditForm({ route }) {
           <View style={styles.form}>
             <Formik
               initialValues={{
-                name: item.name,
-                lastname: item.lastname,
+                name: item.name == "Без" ? "" : item.name,
+                lastname: item.lastname == "имени" ? "" : item.lastname,
                 number: item.number,
                 more: item.more,
                 key: item.key,
