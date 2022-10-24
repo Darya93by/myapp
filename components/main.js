@@ -321,16 +321,25 @@ export default function Main({ navigation }) {
         </View>
       </View>
 
-      <TouchableOpacity
-        style={{ flex: 1 }}
-        onPress={() => {
-          navigation.navigate("Form", {
-            addContact: addContact,
-            stateContact: stateContact,
-          });
-        }}
-      >
+      <TouchableOpacity style={{ flex: 1 }}>
         <Ionicons
+          name="search"
+          size={35}
+          style={styles.search}
+          color="black"
+          onPress={() => {
+            // setResalt();
+            navigation.navigate("TestApi");
+            // console.log(res.data);
+          }}
+        />
+        <Ionicons
+          onPress={() => {
+            navigation.navigate("Form", {
+              addContact: addContact,
+              stateContact: stateContact,
+            });
+          }}
           name="person-add"
           size={35}
           style={styles.add}
@@ -342,6 +351,12 @@ export default function Main({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  search: {
+    alignSelf: "flex-start",
+    left: "6%",
+    bottom: 15,
+    position: "absolute",
+  },
   add: {
     alignSelf: "flex-end",
     right: "6%",

@@ -7,6 +7,7 @@ import EditForm from "./editForm";
 
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
+import TestApi from "./TestApi";
 
 const Stack = createStackNavigator();
 
@@ -99,6 +100,22 @@ export default function Navigate() {
             },
           }}
           component={TakePhoto}
+        />
+        <Stack.Screen
+          name="TestApi"
+          options={{
+            title: "Найти на сервере",
+            headerStyle: {
+              backgroundColor: "#F0E68C",
+              height: 60,
+              borderRadius: 10,
+            },
+            headerTitleStyle: {
+              fontFamily: "ns-normal",
+              fontSize: 26,
+            },
+          }}
+          component={TestApi}
         />
       </Stack.Navigator>
     </NavigationContainer>
