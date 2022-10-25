@@ -322,17 +322,17 @@ export default function Main({ navigation }) {
       </View>
 
       <TouchableOpacity style={{ flex: 1 }}>
+        {/* Работа с сервером */}
         <Ionicons
           name="search"
           size={35}
           style={styles.search}
           color="black"
           onPress={() => {
-            // setResalt();
             navigation.navigate("TestApi");
-            // console.log(res.data);
           }}
         />
+        {/* Конец работы с сервером */}
         <Ionicons
           onPress={() => {
             navigation.navigate("Form", {
