@@ -22,7 +22,7 @@ export default function Main({ navigation }) {
       image: require("../assets/Pngtree.png"),
       name: "Дарья",
       lastname: "Пушкарь",
-      number: "+375(33)6905793",
+      number: "",
       more: " more more more more more more more more more more more more more more more more more more more more more more more more",
       key: 1,
     },
@@ -123,12 +123,14 @@ export default function Main({ navigation }) {
       if (newContact.key == undefined) {
         newContact.key = Math.random().toString(36);
         newContact.image = userImage;
+        newContact.indicate = true;
       } else newContact.image = userImage;
       return [newContact, ...list];
     });
     setSearching((list) => {
       newContact.key = Math.random().toString(36);
       newContact.image = userImage;
+      newContact.indicate = true;
       return [newContact, ...list];
     });
   };
@@ -212,14 +214,16 @@ export default function Main({ navigation }) {
       <View style={{ flex: 11.5 }}>
         <View>
           <SwipeListView
-            keyExtractor={(item) => item.key}
+            keyExtractor={(item) => item.key.toString()}
             style={{ top: -20 }}
             data={searchinf}
             renderHiddenItem={({ item, key }) => (
               <View style={styles.rowBack}>
                 <TouchableOpacity
                   onPress={() => {
-                    makeCall(item.number);
+                    item.number
+                      ? makeCall(item.number)
+                      : Alert.alert("", "Номер не был указан");
                   }}
                 >
                   <Text>
@@ -329,7 +333,11 @@ export default function Main({ navigation }) {
           style={styles.search}
           color="black"
           onPress={() => {
-            navigation.navigate("TestApi");
+            navigation.navigate("TestApi", {
+              addContact: addContact,
+              stateContact: stateContact,
+              contact: contact,
+            });
           }}
         />
         {/* Конец работы с сервером */}

@@ -4,7 +4,7 @@ import About from "./abouit";
 import TakePhoto from "./TakePhoto";
 import Form from "./form";
 import EditForm from "./editForm";
-
+import UsersOfServer from "./UsersOfServer";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import TestApi from "./TestApi";
@@ -116,6 +116,22 @@ export default function Navigate() {
             },
           }}
           component={TestApi}
+        />
+        <Stack.Screen
+          name="UsersOfServer"
+          options={{
+            title: "О контакте",
+            headerStyle: {
+              backgroundColor: "#F0E68C",
+              height: 60,
+              borderRadius: 10,
+            },
+            headerTitleStyle: {
+              fontFamily: "ns-normal",
+              fontSize: 26,
+            },
+          }}
+          component={UsersOfServer}
         />
       </Stack.Navigator>
     </NavigationContainer>
