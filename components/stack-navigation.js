@@ -8,6 +8,7 @@ import UsersOfServer from "./UsersOfServer";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import TestApi from "./TestApi";
+import MyPage from "./MyPage";
 
 const Stack = createStackNavigator();
 
@@ -19,10 +20,12 @@ export default function Navigate() {
           name="Main"
           component={Main}
           options={{
+            headerMode: "none",
+            mode: "modal",
             title: "Контакты",
             headerStyle: {
               backgroundColor: "#F0E68C",
-              height: 65,
+              height: 0,
               borderRadius: 0,
             },
             headerTitleStyle: {
@@ -132,6 +135,24 @@ export default function Navigate() {
             },
           }}
           component={UsersOfServer}
+        />
+        <Stack.Screen
+          name="MyPage"
+          options={{
+            headerMode: "none",
+            mode: "modal",
+            title: "Моя страница",
+            headerStyle: {
+              backgroundColor: "#F0E68C",
+              height: 60,
+              borderRadius: 10,
+            },
+            headerTitleStyle: {
+              fontFamily: "ns-normal",
+              fontSize: 26,
+            },
+          }}
+          component={MyPage}
         />
       </Stack.Navigator>
     </NavigationContainer>

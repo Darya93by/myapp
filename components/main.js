@@ -15,6 +15,7 @@ import { Entypo } from "@expo/vector-icons";
 import { Foundation } from "@expo/vector-icons";
 import { Searchbar } from "react-native-paper";
 import { SwipeListView } from "react-native-swipe-list-view";
+import { AntDesign } from "@expo/vector-icons";
 
 export default function Main({ navigation }) {
   const [contact, setContact] = useState([
@@ -202,158 +203,170 @@ export default function Main({ navigation }) {
   };
 
   return (
-    <View style={gStyle.main}>
-      <Searchbar
-        placeholder="Поиск"
-        onChangeText={(text) => {
-          searchFunction(text);
-        }}
-        value={searchinf}
-        style={styles.Search}
-      />
-      <View style={{ flex: 11.5 }}>
-        <View>
-          <SwipeListView
-            keyExtractor={(item) => item.key.toString()}
-            style={{ top: -20 }}
-            data={searchinf}
-            renderHiddenItem={({ item, key }) => (
-              <View style={styles.rowBack}>
-                <TouchableOpacity
-                  onPress={() => {
-                    item.number
-                      ? makeCall(item.number)
-                      : Alert.alert("", "Номер не был указан");
-                  }}
-                >
-                  <Text>
-                    <Foundation name="telephone" size={24} color="black" />
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={[styles.backRightBtn, styles.backRightBtnLeft]}
-                  onPress={() => {
-                    Alert.alert(
-                      "",
-                      "Вы действительно хотите удалить контакт?",
-                      [
-                        {
-                          text: "Да",
-                          onPress: () => deleteContact(item.key),
-                        },
-                        {
-                          text: "Нет",
-                          onPress: () => console.log("отмена"),
-                        },
-                      ]
-                    );
-                  }}
-                >
-                  <Text>
-                    <MaterialIcons
-                      style={{
-                        padding: 14,
-                        right: 50,
-                      }}
-                      name="delete"
-                      size={20}
-                      color="black"
-                    />
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  style={{ paddingRight: 10 }}
-                  onPress={() => [
-                    handleSlectedCont(item),
-                    navigation.navigate("EditForm", {
-                      selectedCont: selectedCont,
-                      addSelectCont: addSelectCont,
-                      item,
-                    }),
-                  ]}
-                >
-                  <Text>
-                    <Entypo
-                      name="edit"
-                      size={20}
-                      color="black"
-                      style={{
-                        padding: 14,
-                        right: 0,
-                      }}
-                    />
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            )}
-            leftOpenValue={50}
-            rightOpenValue={-100}
-            previewRowKey={"0"}
-            previewOpenValue={-40}
-            previewOpenDelay={3000}
-            directionalDistanceChangeThreshold={5}
-            renderItem={({ item, key }) => (
-              <TouchableOpacity
-                onPress={() => {
-                  handleSlectedCont(item);
-                  console.log(item);
-                  navigation.navigate("About", {
-                    item: item,
-                    deleteContact: deleteContact,
-                    handleSlectedCont: handleSlectedCont,
-                    addSelectCont: addSelectCont,
-                    selectedCont: selectedCont,
-                  });
-                }}
-              >
-                <View
-                  style={[
-                    { flex: 1 },
-                    { flexDirection: "row" },
-                    { alignItems: "center" },
-                    { backgroundColor: "#FFFFFF" },
-                  ]}
-                >
-                  <Image source={item.image} style={styles.image} />
-                  <Text style={styles.nameStyle} key={item.key}>
-                    {item.name} {item.lastname}{" "}
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            )}
-          />
-        </View>
+    <View style={{ flex: 1 }}>
+      <View style={styles.headerStyle}>
+        <AntDesign
+          name="idcard"
+          size={24}
+          style={{ paddingTop: 19, paddingLeft: 16 }}
+          color="black"
+          onPress={() => navigation.navigate("MyPage")}
+        />
+        <Text style={[styles.headerTitleStyle, { flex: 3 }]}>Контакты</Text>
       </View>
+      <View style={gStyle.main}>
+        <Searchbar
+          placeholder="Поиск"
+          onChangeText={(text) => {
+            searchFunction(text);
+          }}
+          value={searchinf}
+          style={styles.Search}
+        />
+        <View style={{ flex: 11.5 }}>
+          <View>
+            <SwipeListView
+              keyExtractor={(item) => item.key.toString()}
+              style={{ top: -20 }}
+              data={searchinf}
+              renderHiddenItem={({ item, key }) => (
+                <View style={styles.rowBack}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      item.number
+                        ? makeCall(item.number)
+                        : Alert.alert("", "Номер не был указан");
+                    }}
+                  >
+                    <Text>
+                      <Foundation name="telephone" size={24} color="black" />
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={[styles.backRightBtn, styles.backRightBtnLeft]}
+                    onPress={() => {
+                      Alert.alert(
+                        "",
+                        "Вы действительно хотите удалить контакт?",
+                        [
+                          {
+                            text: "Да",
+                            onPress: () => deleteContact(item.key),
+                          },
+                          {
+                            text: "Нет",
+                            onPress: () => console.log("отмена"),
+                          },
+                        ]
+                      );
+                    }}
+                  >
+                    <Text>
+                      <MaterialIcons
+                        style={{
+                          padding: 14,
+                          right: 50,
+                        }}
+                        name="delete"
+                        size={20}
+                        color="black"
+                      />
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={{ paddingRight: 10 }}
+                    onPress={() => [
+                      handleSlectedCont(item),
+                      navigation.navigate("EditForm", {
+                        selectedCont: selectedCont,
+                        addSelectCont: addSelectCont,
+                        item,
+                      }),
+                    ]}
+                  >
+                    <Text>
+                      <Entypo
+                        name="edit"
+                        size={20}
+                        color="black"
+                        style={{
+                          padding: 14,
+                          right: 0,
+                        }}
+                      />
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+              leftOpenValue={50}
+              rightOpenValue={-100}
+              previewRowKey={"0"}
+              previewOpenValue={-40}
+              previewOpenDelay={3000}
+              directionalDistanceChangeThreshold={5}
+              renderItem={({ item, key }) => (
+                <TouchableOpacity
+                  onPress={() => {
+                    handleSlectedCont(item);
+                    console.log(item);
+                    navigation.navigate("About", {
+                      item: item,
+                      deleteContact: deleteContact,
+                      handleSlectedCont: handleSlectedCont,
+                      addSelectCont: addSelectCont,
+                      selectedCont: selectedCont,
+                    });
+                  }}
+                >
+                  <View
+                    style={[
+                      { flex: 1 },
+                      { flexDirection: "row" },
+                      { alignItems: "center" },
+                      { backgroundColor: "#FFFFFF" },
+                    ]}
+                  >
+                    <Image source={item.image} style={styles.image} />
+                    <Text style={styles.nameStyle} key={item.key}>
+                      {item.name} {item.lastname}{" "}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              )}
+            />
+          </View>
+        </View>
 
-      <TouchableOpacity style={{ flex: 1 }}>
-        {/* Работа с сервером */}
-        <Ionicons
-          name="search"
-          size={35}
-          style={styles.search}
-          color="black"
-          onPress={() => {
-            navigation.navigate("TestApi", {
-              addContact: addContact,
-              stateContact: stateContact,
-              contact: contact,
-            });
-          }}
-        />
-        {/* Конец работы с сервером */}
-        <Ionicons
-          onPress={() => {
-            navigation.navigate("Form", {
-              addContact: addContact,
-              stateContact: stateContact,
-            });
-          }}
-          name="person-add"
-          size={35}
-          style={styles.add}
-          color="black"
-        />
-      </TouchableOpacity>
+        <TouchableOpacity style={{ flex: 1 }}>
+          {/* Работа с сервером */}
+          <Ionicons
+            name="search"
+            size={35}
+            style={styles.search}
+            color="black"
+            onPress={() => {
+              navigation.navigate("TestApi", {
+                addContact: addContact,
+                stateContact: stateContact,
+                contact: contact,
+              });
+            }}
+          />
+          {/* Конец работы с сервером */}
+          <Ionicons
+            onPress={() => {
+              navigation.navigate("Form", {
+                addContact: addContact,
+                stateContact: stateContact,
+              });
+            }}
+            name="person-add"
+            size={35}
+            style={styles.add}
+            color="black"
+          />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -436,5 +449,19 @@ const styles = StyleSheet.create({
   },
   backTextWhite: {
     color: "#FFF",
+  },
+  headerStyle: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    backgroundColor: "#F0E68C",
+    height: 65,
+    borderRadius: 0,
+  },
+  headerTitleStyle: {
+    fontFamily: "ns-normal",
+    fontSize: 26,
+    color: "#000",
+    paddingLeft: "5%",
+    paddingTop: 13,
   },
 });
